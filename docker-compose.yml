@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  temperature-finder:
+    container_name: temperature-finder
+    build:
+      context: .
+    volumes:
+      - ./application:/var/www/html
+    ports:
+      - "4000:80"
+    restart: always
