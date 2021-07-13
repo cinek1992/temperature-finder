@@ -8,5 +8,26 @@ services:
     volumes:
       - ./application:/var/www/html
     ports:
-      - "4000:80"
+      - "${WEB_PORT}:80"
     restart: always
+    environment:
+      - PORT=80
+  temperature-finder-db:
+    image: postgres:latest
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "${DB_PORT}:5432"
+    environment:
+      POSTGRES_PASSWORD: '${DB_PASSWORD}'
+      POSTGRES_USER: '${DB_USERNAME}'
+  temperature-finder-redis:
+    image: redis:latest
+  temperature-finder-db-test:
+    image: postgres:latest
+    restart: unless-stopped
+    tty: true
+    environment:
+      POSTGRES_DB: '${DB_DATABASE}'
+      POSTGRES_PASSWORD: '${DB_PASSWORD}'
+      POSTGRES_USER: '${DB_USERNAME}'

@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Str;
 
+$databaseEnv = parse_url(env('DATABASE_URL'));
+
 return [
 
     /*
@@ -90,6 +92,18 @@ return [
             'prefix' => '',
             'prefix_indexes' => true,
         ],
+        'heroku' => [
+            'driver' => 'pgsql',
+            'host' => $databaseEnv['host'] ?? 'localhost',
+            'port' => $databaseEnv['port'] ?? '4321',
+            'database' => isset($databaseEnv['path']) ? trim($databaseEnv['path'], '/') : 'postgres',
+            'username' => $databaseEnv['user'] ?? 'postgres',
+            'password' => $databaseEnv['pass'] ?? 'postgres',
+            'charset' => env('DB_CHARSET', 'utf8'),
+            'prefix' => env('DB_PREFIX', ''),
+            'schema' => env('DB_SCHEMA', 'public'),
+            'sslmode' => env('DB_SSL_MODE', 'prefer'),
+        ]
 
     ],
 

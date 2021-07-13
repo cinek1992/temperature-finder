@@ -3,8 +3,10 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use \Illuminate\Support\Facades\DB;
+use \App\Constants\TemperatureTypes;
 
-class CreateUsersTable extends Migration
+class CreateTemperatureTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +15,16 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('temperature_types', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
             $table->timestamps();
         });
+        foreach (config('temperatureformat.formats') as $temperatureType => $class) {
+            DB::table('temperature_types')->insert([
+                ['name' => $temperatureType]
+            ]);
+        }
     }
 
     /**
@@ -31,6 +34,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('temperature_types');
     }
 }
